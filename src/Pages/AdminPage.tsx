@@ -4,6 +4,8 @@ import { LuDollarSign } from "react-icons/lu";
 import { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaToggleOn } from "react-icons/fa";
+import { BarChart } from "../Components/Charts/BarChart";
+import { PieChart } from "../Components/Charts/PieChart";
 
 export const AdminPage = () => {
   // State : to manage Admin Tabs
@@ -14,6 +16,30 @@ export const AdminPage = () => {
   });
 
   // console.log(tabs);
+
+  // Analytics Data - Car Brand
+  const carBrandData = [
+    { carName: "Honda", count: 12 },
+    { carName: "Toyota", count: 8 },
+    { carName: "Suzuki", count: 5 },
+    { carName: "Tata", count: 15 },
+    { carName: "Hyundai", count: 20 },
+    { carName: "Renault", count: 4 },
+  ];
+
+  // Analytics Data - Car Status
+  const statusData = [
+    { key: "active", count: 10 },
+    { key: "inactive", count: 3 },
+  ];
+
+  // Analytics Data - Car Conditions
+  const carConditionData = [
+    { carName: "Excellent", count: 12 },
+    { carName: "Very Good", count: 8 },
+    { carName: "Good", count: 5 },
+    { carName: "Fair", count: 15 },
+  ];
 
   return (
     <div className="min-h-[100vh] bg-slate-100/40 flex flex-col">
@@ -145,21 +171,23 @@ export const AdminPage = () => {
               {/* Left */}
               <div className="w-1/2 px-6 py-4 border border-slate-300 rounded-xl">
                 <p className="text-sm font-semibold">Listings by Brand</p>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-slate-500 my-1">
                   Distribution of car brands
                 </p>
 
-                {/* Graph */}
+                {/* Graph - Car Brands v/s Count */}
+                <BarChart data={carBrandData} />
               </div>
 
               {/* Right */}
               <div className="w-1/2 px-6 py-4 border border-slate-300 rounded-xl">
                 <p className="text-sm font-semibold">Listing Status</p>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-slate-500 my-1">
                   Active vs Inactive Listings
                 </p>
 
-                {/* Graph */}
+                {/* Graph - Car Status v/s Count */}
+                <PieChart data={statusData} />
               </div>
             </div>
           )}
@@ -239,44 +267,47 @@ export const AdminPage = () => {
             </div>
           )}
 
-          {/* Overview Tab */}
+          {/* Analytics Tab */}
           {tabs.analytics && (
             <div className="flex gap-3">
               {/* Left */}
               <div className="w-1/2 px-6 py-4 border border-slate-300 rounded-xl">
                 <p className="text-sm font-semibold">Listings by Condition</p>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-slate-500 my-1">
                   Distribution of car conditions
                 </p>
 
-                {/* Graph */}
+                {/* Graph - Car Conditions v/s Count */}
+                <BarChart data={carConditionData} />
               </div>
 
               {/* Right */}
               <div className="w-1/2 px-6 py-4 border border-slate-300 rounded-xl">
                 <p className="text-sm font-semibold">Platform Statistics</p>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-slate-500 my-1">
                   Key metrics and insights
                 </p>
 
-                <div className="mt-3 flex items-center justify-between text-xs font-semibold">
-                  <p className="text-slate-500">Most Popular Brand</p>
-                  <p>BMW</p>
-                </div>
+                <div className="mt-16">
+                  <div className="mt-5 flex items-center justify-between text-xs font-semibold">
+                    <p className="text-slate-500">Most Popular Brand</p>
+                    <p>BMW</p>
+                  </div>
 
-                <div className="mt-3 flex items-center justify-between text-xs font-semibold">
-                  <p className="text-slate-500">Highest Priced Car</p>
-                  <p>$3,400,000</p>
-                </div>
+                  <div className="mt-5 flex items-center justify-between text-xs font-semibold">
+                    <p className="text-slate-500">Highest Priced Car</p>
+                    <p>$3,400,000</p>
+                  </div>
 
-                <div className="mt-3 flex items-center justify-between text-xs font-semibold">
-                  <p className="text-slate-500">Lowest Priced Car</p>
-                  <p>$18,500</p>
-                </div>
+                  <div className="mt-5 flex items-center justify-between text-xs font-semibold">
+                    <p className="text-slate-500">Lowest Priced Car</p>
+                    <p>$18,500</p>
+                  </div>
 
-                <div className="mt-3 flex items-center justify-between text-xs font-semibold">
-                  <p className="text-slate-500">Average Mileage</p>
-                  <p>26,300 miles</p>
+                  <div className="mt-5 flex items-center justify-between text-xs font-semibold">
+                    <p className="text-slate-500">Average Mileage</p>
+                    <p>26,300 miles</p>
+                  </div>
                 </div>
               </div>
             </div>
