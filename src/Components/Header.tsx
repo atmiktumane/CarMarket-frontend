@@ -32,7 +32,7 @@ export const Header = (props: any) => {
 
         {/* Role */}
         <div className="bg-violet-300/30 text-violet-600 px-3 py-1 rounded-full text-xs font-semibold">
-          {props.seller ? "Seller" : "Buyer"}
+          {props.seller ? "Seller" : props.admin ? "Admin" : "Buyer"}
         </div>
 
         {/* Logout */}
