@@ -6,7 +6,7 @@ export const Header = () => {
   return (
     <div className="w-full h-20 flex justify-between items-center px-6 bg-slate-100">
       {/* Left - Logo */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 cursor-default">
         <FaCar className="h-8 w-8 text-purple-700" />
         <p className="text-2xl font-bold text-purple-500">CarMarket</p>
       </div>
