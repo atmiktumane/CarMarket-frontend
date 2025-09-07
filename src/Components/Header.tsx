@@ -2,7 +2,8 @@ import { Avatar, Button } from "@mantine/core";
 import { FaCar } from "react-icons/fa";
 import { MdOutlineLogout } from "react-icons/md";
 
-export const Header = () => {
+export const Header = (props: any) => {
+  //   console.log(props);
   return (
     <div className="w-full h-20 flex justify-between items-center px-6 bg-slate-100">
       {/* Left - Logo */}
@@ -31,7 +32,7 @@ export const Header = () => {
 
         {/* Role */}
         <div className="bg-violet-300/30 text-violet-600 px-3 py-1 rounded-full text-xs font-semibold">
-          Buyer
+          {props.seller ? "Seller" : "Buyer"}
         </div>
 
         {/* Logout */}

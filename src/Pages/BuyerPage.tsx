@@ -157,7 +157,7 @@ export const BuyerPage = () => {
       </div>
 
       {/* Mantine Modal - View Car Details */}
-      <Modal opened={opened} onClose={close} title="Car Details">
+      <Modal centered opened={opened} onClose={close} title="Car Details">
         {/* Modal content */}
         <div className="flex flex-col gap-3">
           {/* Title */}
