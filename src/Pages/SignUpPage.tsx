@@ -143,7 +143,7 @@ export const SignUpPage = () => {
       setLoader(false);
 
       // Error Notification
-      errorNotification("Failed to fetch all jobs", error.response?.data);
+      errorNotification("Failed to Sign Up", error.response?.data);
     }
   };
 
