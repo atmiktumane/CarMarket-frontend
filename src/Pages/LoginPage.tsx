@@ -15,6 +15,8 @@ import {
   successNotification,
 } from "../Utils/NotificationService";
 import { setLocalStorageItem } from "../Utils/LocalStorage";
+import { useDisclosure } from "@mantine/hooks";
+import { ResetPassword } from "../Components/ResetPassword";
 
 export const LoginPage = () => {
   // Initial values of Login form inputs
@@ -31,6 +33,9 @@ export const LoginPage = () => {
 
   // State : To manage loader
   const [loader, setLoader] = useState<boolean>(false);
+
+  // Mantine ResetPassword Modal (Open/Close)
+  const [opened, { open, close }] = useDisclosure(false);
 
   // Navigation
   const navigate = useNavigate();
@@ -98,7 +103,7 @@ export const LoginPage = () => {
       setLoader(false);
 
       // Error Notification
-      errorNotification("Failed to Login", error.response?.data);
+      errorNotification("Error", "Failed to Login");
     }
   };
 
@@ -155,10 +160,7 @@ export const LoginPage = () => {
           </p>
 
           {/* Reset Password */}
-          <button
-            // onClick={open}
-            className="text-violet-500 hover:underline"
-          >
+          <button onClick={open} className="text-violet-500 hover:underline">
             Reset Password ?
           </button>
         </div>
@@ -177,6 +179,9 @@ export const LoginPage = () => {
           </p>
         </div>
       </div>
+
+      {/* Open ResetPassword Modal */}
+      <ResetPassword opened={opened} close={close} />
 
       {/* Loader */}
       <LoadingOverlay

@@ -14,7 +14,7 @@ import { Notifications } from "@mantine/notifications";
 export const App = () => {
   return (
     <MantineProvider>
-      <Notifications position="top-center" zIndex={100} />
+      <Notifications position="top-center" zIndex={10000} />
       <div className="font-['poppins']">
         <Routes>
           <Route path="/signup" element={<SignUpPage />} />
