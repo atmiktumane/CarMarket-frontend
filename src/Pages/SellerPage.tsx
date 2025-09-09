@@ -168,35 +168,21 @@ export const SellerPage = () => {
               : "Fill in the details of your car listing"}
           </p>
 
-          {/* Row 1 */}
-          <div className=" flex items-center gap-3">
-            {/* Brand Input */}
-            <TextInput
-              withAsterisk
-              name="brand"
-              label="Brand"
-              placeholder="Enter Brand"
-              radius="md"
-              className="w-1/2"
-            />
-
-            {/* Model Input */}
-            <TextInput
-              withAsterisk
-              name="model"
-              label="Model"
-              placeholder="Enter Model"
-              radius="md"
-              className="w-1/2"
-            />
-          </div>
-
-          {/* Row 2 - Title Input */}
+          {/* Row 1 - Name Input */}
           <TextInput
             withAsterisk
-            name="title"
-            label="Title"
-            placeholder="Enter Title"
+            name="name"
+            label="Name"
+            placeholder="Enter Name"
+            radius="md"
+          />
+
+          {/* Row 2 - Model Input */}
+          <TextInput
+            withAsterisk
+            name="model"
+            label="Model"
+            placeholder="Enter Model"
             radius="md"
           />
 
