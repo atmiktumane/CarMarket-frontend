@@ -14,6 +14,7 @@ import {
   errorNotification,
   successNotification,
 } from "../Utils/NotificationService";
+import { setLocalStorageItem } from "../Utils/LocalStorage";
 
 export const LoginPage = () => {
   // Initial values of Login form inputs
@@ -75,13 +76,23 @@ export const LoginPage = () => {
 
       console.log("Login success data : ", response);
 
+      // Save data in Local Storage
+      setLocalStorageItem("user", response);
+
       // Hide Loader
       setLoader(false);
 
       // Show Success Notification
       successNotification("Success", "Login Successfull");
 
-      // Navigate to Another Page
+      // Navigate to Another Page based on User Role
+      if (response.role === "ADMIN") {
+        navigate("/admin");
+      } else if (response.role === "SELLER") {
+        navigate("/seller");
+      } else {
+        navigate("/buyer");
+      }
     } catch (error: any) {
       // Hide Loader
       setLoader(false);
