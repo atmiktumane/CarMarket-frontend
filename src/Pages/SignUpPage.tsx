@@ -1,9 +1,20 @@
-import { Button, PasswordInput, Select, TextInput } from "@mantine/core";
+import {
+  Button,
+  LoadingOverlay,
+  PasswordInput,
+  Select,
+  TextInput,
+} from "@mantine/core";
 import { useState } from "react";
 import { FaCar } from "react-icons/fa";
 import { MdLockOutline, MdOutlineAlternateEmail } from "react-icons/md";
 import { signupFormValidation } from "../Utils/FormValidation";
 import { signupAPI } from "../Services/UserService";
+import { useNavigate } from "react-router-dom";
+import {
+  errorNotification,
+  successNotification,
+} from "../Utils/NotificationService";
 
 export const SignUpPage = () => {
   // Initial values of Signup form inputs
@@ -20,6 +31,12 @@ export const SignUpPage = () => {
 
   // State to manage : validation errors in input fields
   const [formError, setFormError] = useState<{ [key: string]: string }>(form);
+
+  // State : To manage loader
+  const [loader, setLoader] = useState<boolean>(false);
+
+  // Navigation
+  const navigate = useNavigate();
 
   // Handle Data function -> save data onChange of input fields
   const onChangeHandleData = (e: any) => {
@@ -102,15 +119,31 @@ export const SignUpPage = () => {
 
     // console.log("User Data : ", data);
 
+    // Show Loader
+    setLoader(true);
+
     try {
-      const response = await signupAPI(data);
+      await signupAPI(data);
 
-      console.log("Register success data : ", response);
+      // console.log("Register success data : ", response);
 
-      alert("SignUp Success");
+      // Hide Loader
+      setLoader(false);
+
+      // Show Success Notification
+      successNotification(
+        "User Registered Successfully",
+        "Navigating to Login Page"
+      );
+
+      // Navigate to Login Page
+      navigate("/login");
     } catch (error: any) {
+      // Hide Loader
+      setLoader(false);
+
       // Error Notification
-      alert("Failed to Signup");
+      errorNotification("Failed to fetch all jobs", error.response?.data);
     }
   };
 
@@ -214,6 +247,14 @@ export const SignUpPage = () => {
           </p>
         </div>
       </div>
+
+      {/* Loader */}
+      <LoadingOverlay
+        visible={loader}
+        zIndex={1000}
+        overlayProps={{ radius: "sm", blur: 2 }}
+        loaderProps={{ color: "violet", type: "bars" }}
+      />
     </>
   );
 };
