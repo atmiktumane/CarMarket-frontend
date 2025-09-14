@@ -20,6 +20,7 @@ import {
 } from "../Utils/NotificationService";
 import {
   addCarAPI,
+  deleteCarAPI,
   getAllCarsOfUserAPI,
   updateCarAPI,
 } from "../Services/CarService";
@@ -49,6 +50,9 @@ export const SellerPage = () => {
 
   // Matine Modal Hook : Add/Edit Car
   const [opened, { open, close }] = useDisclosure(false);
+
+  // Mantine Modal Hook : Delete Car
+  const [deleteCarModal, setDeleteCarModal] = useState<boolean>(false);
 
   // State : to manage isEdit
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -157,6 +161,13 @@ export const SellerPage = () => {
             </Button>
 
             <Button
+              onClick={() => {
+                // Store current car item in variable
+                setCarDetails(item);
+
+                // Open Car Delete Modal
+                setDeleteCarModal(true);
+              }}
               fullWidth
               variant="filled"
               color="red.9"
@@ -275,6 +286,35 @@ export const SellerPage = () => {
     }
   };
 
+  // Handle Delete Car
+  const handleDeleteCar = async () => {
+    // Show Loader
+    setLoader(true);
+
+    try {
+      const response = await deleteCarAPI(carDetails?.id);
+      // console.log("Response : ", response.message);
+
+      // Reset All variables
+      setCarDetails(formData);
+
+      // Close Delete Modal
+      setDeleteCarModal(false);
+
+      // Fetch All car list
+      getAllCarsOfUser();
+
+      // Hide Loader
+      setLoader(false);
+
+      // Show Success Modal
+      successNotification("Success", response?.message);
+    } catch (error) {
+      // Hide Loader
+      setLoader(false);
+    }
+  };
+
   // Page Load Workflow
   useEffect(() => {
     getAllCarsOfUser();
@@ -318,7 +358,7 @@ export const SellerPage = () => {
 
           {/* Row 2 - Info */}
           <div className="flex flex-col px-6 py-3 gap-1 border border-slate-300 rounded-lg">
-            <p className="font-semibold">Your Listings (0)</p>
+            <p className="font-semibold">Your Listings ({carList?.length})</p>
             <p className="text-sm font-medium text-slate-600">
               Manage your car listings and track their performance
             </p>
@@ -491,6 +531,45 @@ export const SellerPage = () => {
                   Add Car
                 </Button>
               )}
+            </div>
+          </div>
+        </Modal>
+
+        {/* Mantine Modal - Delete Car Modal */}
+        <Modal
+          centered
+          opened={deleteCarModal}
+          onClose={() => setDeleteCarModal(false)}
+          title="Delete Car"
+          className="[&_h2]:!font-medium"
+        >
+          {/* Modal content */}
+          <div className="flex flex-col gap-3">
+            <p className="text-red-700 text-sm text-center">
+              Are You Sure, you want to Delete this Car ?
+            </p>
+
+            {/* Buttons - Cancel + Delete btn */}
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => setDeleteCarModal(false)}
+                fullWidth
+                variant="light"
+                color="black"
+                radius="md"
+              >
+                Cancel
+              </Button>
+
+              <Button
+                onClick={handleDeleteCar}
+                fullWidth
+                variant="filled"
+                color="red.9"
+                radius="md"
+              >
+                Delete
+              </Button>
             </div>
           </div>
         </Modal>

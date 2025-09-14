@@ -62,4 +62,24 @@ const addCarAPI = async (user_id: string, car_data: CarDetailsType) => {
   }
 };
 
-export { getAllActiveCarAPI, getAllCarsOfUserAPI, updateCarAPI, addCarAPI };
+// Seller - DELETE : delete car
+const deleteCarAPI = async (car_id: string) => {
+  try {
+    const response = await axios.delete(
+      `${apiUrl}/api/v1/car/delete/${car_id}`
+    );
+
+    return response.data;
+  } catch (error: any) {
+    errorNotification("Error", "Error in deleting car record");
+    console.error("An unexpected error occurred : ", error);
+  }
+};
+
+export {
+  getAllActiveCarAPI,
+  getAllCarsOfUserAPI,
+  updateCarAPI,
+  addCarAPI,
+  deleteCarAPI,
+};
