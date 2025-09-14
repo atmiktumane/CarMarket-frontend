@@ -1,9 +1,17 @@
 import { Avatar, Button } from "@mantine/core";
 import { FaCar } from "react-icons/fa";
 import { MdOutlineLogout } from "react-icons/md";
+import { getLocalStorageItem } from "../Utils/LocalStorage";
+import { getNameInitials } from "../Utils/Utilities";
 
-export const Header = (props: any) => {
+export const Header = () => {
   //   console.log(props);
+
+  // Fetch User Details from Local Storage
+  const userDetails = getLocalStorageItem("user");
+
+  // console.log("userDetails : ", userDetails);
+
   return (
     <div className="w-full h-20 flex justify-between items-center px-6 bg-slate-100">
       {/* Left - Logo */}
@@ -18,21 +26,23 @@ export const Header = (props: any) => {
         <div className="flex items-center gap-2">
           {/* Avatar */}
           <Avatar color="violet" radius="xl" size="md">
-            RV
+            {getNameInitials(userDetails.name)}
           </Avatar>
 
           {/* Name + Email */}
           <div>
-            <p className="font-semibold text-sm capitalize">ranjan vaidya</p>
+            <p className="font-semibold text-sm capitalize">
+              {userDetails.name}
+            </p>
             <p className="font-medium text-xs text-slate-500">
-              ranjanvaidya@gmail.com
+              {userDetails.email}
             </p>
           </div>
         </div>
 
         {/* Role */}
         <div className="bg-violet-300/30 text-violet-600 px-3 py-1 rounded-full text-xs font-semibold">
-          {props.seller ? "Seller" : props.admin ? "Admin" : "Buyer"}
+          {userDetails.role}
         </div>
 
         {/* Logout */}

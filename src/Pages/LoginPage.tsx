@@ -79,7 +79,7 @@ export const LoginPage = () => {
     try {
       const response = await loginAPI(loginData);
 
-      console.log("Login success data : ", response);
+      // console.log("Login success data : ", response);
 
       // Save data in Local Storage
       setLocalStorageItem("user", response);

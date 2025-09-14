@@ -23,7 +23,7 @@ export const SellerPage = () => {
 
   return (
     <div className="min-h-[100vh] bg-slate-100/40 flex flex-col">
-      <Header seller />
+      <Header />
 
       {/* Seller Page Content */}
       <div className="flex flex-col px-18 py-10 gap-10">
