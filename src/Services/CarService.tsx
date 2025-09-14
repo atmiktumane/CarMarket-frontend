@@ -46,4 +46,20 @@ const updateCarAPI = async (car_data: CarDetailsType) => {
   }
 };
 
-export { getAllActiveCarAPI, getAllCarsOfUserAPI, updateCarAPI };
+// Seller - POST : add car
+const addCarAPI = async (user_id: string, car_data: CarDetailsType) => {
+  try {
+    const response = await axios.post(
+      `${apiUrl}/api/v1/car/add/${user_id}`,
+      car_data
+    );
+
+    return response.data;
+  } catch (error: any) {
+    errorNotification("Error", "Error while adding car");
+
+    console.error("An unexpected error occurred : ", error);
+  }
+};
+
+export { getAllActiveCarAPI, getAllCarsOfUserAPI, updateCarAPI, addCarAPI };

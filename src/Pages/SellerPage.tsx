@@ -18,10 +18,18 @@ import {
   errorNotification,
   successNotification,
 } from "../Utils/NotificationService";
-import { getAllCarsOfUserAPI, updateCarAPI } from "../Services/CarService";
+import {
+  addCarAPI,
+  getAllCarsOfUserAPI,
+  updateCarAPI,
+} from "../Services/CarService";
 import type { CarDetailsType } from "./BuyerPage";
 import { getLocalStorageItem } from "../Utils/LocalStorage";
-import { formatCurrencyInr, formatTextToCapitalize } from "../Utils/Utilities";
+import {
+  formatCurrencyInr,
+  formatTextToCapitalize,
+  formatTextToUppercase,
+} from "../Utils/Utilities";
 
 export const SellerPage = () => {
   const formData = {
@@ -35,7 +43,7 @@ export const SellerPage = () => {
     mileage: 0,
     location: "",
     condition: "Good",
-    status: "",
+    status: "ACTIVE",
     userId: "",
   };
 
@@ -189,6 +197,9 @@ export const SellerPage = () => {
 
     // Case 1: Called by controlled Mantine inputs like NumberInput / Select
     if (fieldName) {
+      if (fieldName === "condition") {
+        value = formatTextToUppercase(value); // Format to Uppercase
+      }
       setCarDetails({ ...carDetails, [fieldName]: value });
       return;
     }
@@ -205,26 +216,40 @@ export const SellerPage = () => {
     // Reset Form errors
     setFormError(formData);
 
+    let valid = true;
+
     // Check Required fields validation
     if (carDetails.name === "") {
       setFormError({ ...formError, name: "This field is required" });
+      valid = false;
     }
     if (carDetails.model === "") {
       setFormError({ ...formError, model: "This field is required" });
+      valid = false;
     }
     if (carDetails.location === "") {
       setFormError({ ...formError, location: "This field is required" });
+      valid = false;
     }
     if (carDetails.description === "") {
       setFormError({ ...formError, description: "This field is required" });
+      valid = false;
     }
+
+    // Validation Failed, Please fill all required fields
+    if (valid === false) return;
 
     // Show Loader
     setLoader(true);
 
     try {
-      // Update Car API
-      await updateCarAPI(carDetails);
+      if (isEdit) {
+        // Update Car API
+        await updateCarAPI(carDetails);
+      } else {
+        // Add Car API
+        await addCarAPI(userDetails.id, carDetails);
+      }
 
       // Reset all variables
       setCarDetails(formData);
@@ -274,7 +299,12 @@ export const SellerPage = () => {
             {/* Button - Add new car */}
             <Button
               onClick={() => {
+                // Reset all variables
+                setCarDetails(formData);
+                setFormError(formData);
                 setIsEdit(false);
+
+                // Open Add Car Modal
                 open();
               }}
               leftSection="+"
@@ -451,7 +481,13 @@ export const SellerPage = () => {
                   Update Car
                 </Button>
               ) : (
-                <Button fullWidth variant="filled" color="green" radius="md">
+                <Button
+                  onClick={submitCarForm}
+                  fullWidth
+                  variant="filled"
+                  color="green"
+                  radius="md"
+                >
                   Add Car
                 </Button>
               )}

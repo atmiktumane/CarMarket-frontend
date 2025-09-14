@@ -19,6 +19,13 @@ function formatTextToCapitalize(data: string) {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+function formatTextToUppercase(data: string) {
+  // convert to uppercase, and if space found, replace space with "_" underscore
+  let normalized = data.trim().replace(/\s+/g, "_").toUpperCase();
+
+  return normalized;
+}
+
 function formatCurrencyInr(currency: number) {
   return currency.toLocaleString("en-IN");
 }
@@ -42,4 +49,5 @@ export {
   formatTextToCapitalize,
   formatCurrencyInr,
   formatDate,
+  formatTextToUppercase,
 };
