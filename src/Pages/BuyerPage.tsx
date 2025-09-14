@@ -25,7 +25,7 @@ import {
   formatTextToCapitalize,
 } from "../Utils/Utilities";
 
-type CarDetailsType = {
+export type CarDetailsType = {
   id: string;
   name: string;
   model: string;
