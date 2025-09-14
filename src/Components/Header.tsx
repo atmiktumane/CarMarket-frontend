@@ -1,8 +1,12 @@
 import { Avatar, Button } from "@mantine/core";
 import { FaCar } from "react-icons/fa";
 import { MdOutlineLogout } from "react-icons/md";
-import { getLocalStorageItem } from "../Utils/LocalStorage";
+import {
+  clearAllLocalStorageItems,
+  getLocalStorageItem,
+} from "../Utils/LocalStorage";
 import { getNameInitials } from "../Utils/Utilities";
+import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
   //   console.log(props);
@@ -11,6 +15,15 @@ export const Header = () => {
   const userDetails = getLocalStorageItem("user");
 
   // console.log("userDetails : ", userDetails);
+
+  const navigate = useNavigate();
+
+  const logoutFunction = () => {
+    clearAllLocalStorageItems();
+
+    // Navigate to Login Page
+    navigate("/login");
+  };
 
   return (
     <div className="w-full h-20 flex justify-between items-center px-6 bg-slate-100">
@@ -52,6 +65,7 @@ export const Header = () => {
           color="red.9"
           radius="lg"
           size="xs"
+          onClick={logoutFunction}
         >
           Logout
         </Button>
