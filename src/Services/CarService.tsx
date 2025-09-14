@@ -76,10 +76,24 @@ const deleteCarAPI = async (car_id: string) => {
   }
 };
 
+// Admin - GET : get all cars
+const getAllCarsAPI = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}/api/v1/car/get-all`);
+
+    return response.data;
+  } catch (error) {
+    errorNotification("Error", "Error while Fetching All Cars");
+
+    console.error("An unexpected error occurred : ", error);
+  }
+};
+
 export {
   getAllActiveCarAPI,
   getAllCarsOfUserAPI,
   updateCarAPI,
   addCarAPI,
   deleteCarAPI,
+  getAllCarsAPI,
 };

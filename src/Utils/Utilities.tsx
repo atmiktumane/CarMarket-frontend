@@ -44,10 +44,20 @@ const formatDate = (timestamp: string) => {
   return formattedDate;
 };
 
+const calculateActiveCarsPercentage = (
+  activeListings: number,
+  totalListings: number
+): number => {
+  if (totalListings === 0) return 0;
+
+  return (activeListings / totalListings) * 100;
+};
+
 export {
   getNameInitials,
   formatTextToCapitalize,
   formatCurrencyInr,
   formatDate,
   formatTextToUppercase,
+  calculateActiveCarsPercentage,
 };
