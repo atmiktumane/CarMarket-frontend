@@ -5,9 +5,11 @@ import { errorNotification } from "../Utils/NotificationService";
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
 // Buyer - GET : Fetch All Active Cars API
-const getAllActiveCarAPI = async () => {
+const getAllActiveCarAPI = async (search?: string) => {
   try {
-    const response = await axios.get(`${apiUrl}/api/v1/car/get-all-active`);
+    const response = await axios.get(`${apiUrl}/api/v1/car/get-all-active`, {
+      params: { search }, // attaches ?search=value only if provided
+    });
 
     return response.data;
   } catch (error) {

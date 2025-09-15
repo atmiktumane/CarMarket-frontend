@@ -1,12 +1,4 @@
-import {
-  Button,
-  LoadingOverlay,
-  Modal,
-  NumberInput,
-  Select,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Button, LoadingOverlay, Modal, Text, TextInput } from "@mantine/core";
 import { Header } from "../Components/Header";
 import {
   IoCalendarClearOutline,
@@ -66,15 +58,27 @@ export const BuyerPage = () => {
     userId: "",
   });
 
-  // console.log("carDetails : ", carDetails);
+  // State : to manage search filter
+  const [search, setSearch] = useState<string>("");
 
-  const getAllActiveCarsFunc = async () => {
-    // Show Loader
-    setLoader(true);
+  console.log("search filter : ", search.length);
 
+  const filterOnChange = (e: any) => {
+    let value = e.target.value;
+    setSearch(value);
+
+    // Debouncer
+    const debounceTimer = setTimeout(() => {
+      getAllActiveCarsFunc(search.trim());
+    }, 500); // wait 500ms before API call
+
+    return () => clearTimeout(debounceTimer); // cleanup on new keystroke
+  };
+
+  const getAllActiveCarsFunc = async (search: string) => {
     try {
       // Fetch All Active Cars API call
-      const response = await getAllActiveCarAPI();
+      const response = await getAllActiveCarAPI(search);
 
       // console.log(response);
 
@@ -188,7 +192,14 @@ export const BuyerPage = () => {
   });
 
   useEffect(() => {
-    getAllActiveCarsFunc();
+    // Show Loader
+    setLoader(true);
+
+    // Fetch All Active Cars API call
+    getAllActiveCarsFunc("");
+
+    // Hide Loader
+    setLoader(false);
   }, []);
 
   return (
@@ -211,33 +222,32 @@ export const BuyerPage = () => {
             <p className="font-semibold">Search & Filter</p>
 
             {/* Filters */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center gap-10">
               {/* Search Bar */}
               <TextInput
                 variant="default"
                 leftSection={<IoSearch />}
+                name="search"
                 placeholder="Search Cars..."
                 radius="lg"
-              />
-
-              {/* Brands Filter */}
-              <Select
-                variant="default"
-                placeholder="Select Model"
-                data={["All Models", "BMW", "Honda", "Toyota"]}
-                defaultValue="All Models"
-                radius="lg"
-              />
-
-              {/* Price Filter */}
-              <NumberInput
-                variant="default"
-                placeholder="Max Price ($)"
-                radius="lg"
+                className="w-1/3"
+                value={search}
+                onChange={filterOnChange}
               />
 
               {/* Button - to Clear Filter */}
-              <Button variant="filled" color="violet" radius="lg">
+              <Button
+                onClick={() => {
+                  // Reset Search variable
+                  setSearch("");
+
+                  // Fetch All Active Cars API call
+                  getAllActiveCarsFunc("");
+                }}
+                variant="filled"
+                color="violet"
+                radius="lg"
+              >
                 Clear Filters
               </Button>
             </div>
@@ -245,12 +255,20 @@ export const BuyerPage = () => {
 
           {/* Row 3 - Cars List */}
           <div className="flex flex-col gap-5">
-            <p className="font-medium text-slate-600">3 cars found</p>
+            <p className="font-medium text-slate-600">
+              Cars Found : {activeCarList.length}
+            </p>
 
-            {/* Card 1 */}
-            <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {renderCarList}
-            </div>
+            {/* Cars List */}
+            {activeCarList.length === 0 ? (
+              <p className="text-red-600 font-medium text-center capitalize">
+                car is not present
+              </p>
+            ) : (
+              <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {renderCarList}
+              </div>
+            )}
           </div>
         </div>
 
