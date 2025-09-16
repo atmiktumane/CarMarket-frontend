@@ -91,6 +91,19 @@ const getAllCarsAPI = async () => {
   }
 };
 
+// Admin - GET : fetch analytics data
+const getAnalyticsAPI = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}/api/v1/car/analytics`);
+
+    return response.data;
+  } catch (error: any) {
+    errorNotification("Error", "Error while fetching Analytics data");
+
+    console.error("An unexpected error occurred : ", error);
+  }
+};
+
 export {
   getAllActiveCarAPI,
   getAllCarsOfUserAPI,
@@ -98,4 +111,5 @@ export {
   addCarAPI,
   deleteCarAPI,
   getAllCarsAPI,
+  getAnalyticsAPI,
 };

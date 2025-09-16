@@ -7,7 +7,11 @@ import { FaToggleOn } from "react-icons/fa";
 import { BarChart } from "../Components/Charts/BarChart";
 import { PieChart } from "../Components/Charts/PieChart";
 import { Button, LoadingOverlay, Modal } from "@mantine/core";
-import { deleteCarAPI, getAllCarsAPI } from "../Services/CarService";
+import {
+  deleteCarAPI,
+  getAllCarsAPI,
+  getAnalyticsAPI,
+} from "../Services/CarService";
 import type { CarDetailsType } from "./BuyerPage";
 import {
   calculateActiveCarsPercentage,
@@ -15,6 +19,17 @@ import {
   formatTextToCapitalize,
 } from "../Utils/Utilities";
 import { successNotification } from "../Utils/NotificationService";
+import {
+  formatAnalyticsConditionData,
+  formatAnalyticsModelData,
+  formatAnalyticsStatusData,
+} from "../Utils/AdminAnalytics";
+
+type AnalyticsType = {
+  statusCounts: { key: string; value: number };
+  conditionCounts: { key: string; value: number };
+  topModels: { key: string; value: number }[];
+};
 
 export const AdminPage = () => {
   const formData = {
@@ -61,41 +76,47 @@ export const AdminPage = () => {
   // State : to manage delete car modal
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
 
+  // State : to manage Analytics data
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsType | null>(
+    null
+  );
+
+  // console.log("analyticsData : ", analyticsData);
+
   // Analytics Data - Car Brand/Model
-  const carBrandData = [
-    { carName: "Honda", count: 12 },
-    { carName: "Toyota", count: 8 },
-    { carName: "Suzuki", count: 5 },
-    { carName: "Tata", count: 15 },
-    { carName: "Hyundai", count: 20 },
-    { carName: "Renault", count: 4 },
-  ];
+  const carBrandData = formatAnalyticsModelData(analyticsData?.topModels);
 
   // Analytics Data - Car Status
-  const statusData = [
-    { key: "active", count: 10 },
-    { key: "inactive", count: 3 },
-  ];
+  const statusData = formatAnalyticsStatusData(analyticsData?.statusCounts);
 
   // Analytics Data - Car Conditions
-  const carConditionData = [
-    { carName: "Excellent", count: 12 },
-    { carName: "Very Good", count: 8 },
-    { carName: "Good", count: 5 },
-    { carName: "Fair", count: 15 },
-  ];
+  const carConditionData = formatAnalyticsConditionData(
+    analyticsData?.conditionCounts
+  );
 
+  // Fetch ALL Cars API call
   const getAllCarsFunction = async () => {
-    // Show Loader
-    setLoader(true);
-
     try {
       const response = await getAllCarsAPI();
 
-      console.log("Response : ", response);
+      // console.log("Response : ", response);
 
       // Store Car List
       setCarList(response);
+    } catch (error) {
+      // Hide Loader
+      setLoader(false);
+    }
+  };
+
+  // Fetch Analytics Data API call
+  const getAnalyticsDataFunc = async () => {
+    try {
+      const response = await getAnalyticsAPI();
+
+      // console.log("response : ", response);
+
+      setAnalyticsData(response);
 
       // Hide Loader
       setLoader(false);
@@ -224,7 +245,14 @@ export const AdminPage = () => {
 
   // PageLoad Workflow
   useEffect(() => {
+    // Show Loader
+    setLoader(true);
+
+    // Fetch All Cars API
     getAllCarsFunction();
+
+    // Fetch Car Analytics API
+    getAnalyticsDataFunc();
   }, []);
 
   return (
