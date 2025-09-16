@@ -359,7 +359,7 @@ export const BuyerPage = () => {
                 <div className="flex items-center justify-between">
                   <p>Price:</p>
                   <p className="font-semibold text-black">
-                    ${formatCurrencyInr(carDetails.price)}
+                    ₹{formatCurrencyInr(carDetails.price)}
                   </p>
                 </div>
 

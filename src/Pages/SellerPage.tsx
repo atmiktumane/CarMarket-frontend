@@ -43,7 +43,7 @@ export const SellerPage = () => {
     createdAt: "",
     mileage: 0,
     location: "",
-    condition: "Good",
+    condition: "",
     status: "ACTIVE",
     userId: "",
   };
@@ -124,9 +124,9 @@ export const SellerPage = () => {
             {item.first_purchase_year} {item.name}
           </p>
           <p className="text-md text-slate-400">
-            ${" "}
+            ₹{" "}
             <span className="font-semibold text-black">
-              ${formatCurrencyInr(item.price)}
+              ₹{formatCurrencyInr(item.price)}
             </span>
           </p>
 
@@ -434,7 +434,7 @@ export const SellerPage = () => {
               <NumberInput
                 withAsterisk
                 name="price"
-                label="Price ($)"
+                label="Price (₹)"
                 placeholder="Enter Price"
                 radius="md"
                 className="w-1/3"

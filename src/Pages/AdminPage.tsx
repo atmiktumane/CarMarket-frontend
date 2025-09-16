@@ -1,6 +1,6 @@
 import { IoAnalytics, IoCarSportOutline } from "react-icons/io5";
 import { Header } from "../Components/Header";
-import { LuDollarSign } from "react-icons/lu";
+import { LuIndianRupee } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaToggleOn } from "react-icons/fa";
@@ -61,7 +61,7 @@ export const AdminPage = () => {
   // State : to manage delete car modal
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
 
-  // Analytics Data - Car Brand
+  // Analytics Data - Car Brand/Model
   const carBrandData = [
     { carName: "Honda", count: 12 },
     { carName: "Toyota", count: 8 },
@@ -159,7 +159,7 @@ export const AdminPage = () => {
         </div>
 
         {/* Col 3 : Price */}
-        <p className="w-1/5 font-semibold">${formatCurrencyInr(item.price)}</p>
+        <p className="w-1/5 font-semibold">₹{formatCurrencyInr(item.price)}</p>
 
         {/* Col 4 : Status */}
         <div className="w-1/5">
@@ -286,11 +286,11 @@ export const AdminPage = () => {
               <div className="flex items-center justify-between mb-4">
                 <p className="font-semibold text-purple-400">Total Value</p>
 
-                <LuDollarSign className="text-purple-600" />
+                <LuIndianRupee className="text-purple-600" />
               </div>
 
               <p className="text-lg font-semibold text-purple-600">
-                ${formatCurrencyInr(listings.totalPrice)}
+                ₹{formatCurrencyInr(listings.totalPrice)}
               </p>
               <p className="font-medium text-xs text-slate-500">
                 Combined listing value
@@ -302,11 +302,11 @@ export const AdminPage = () => {
               <div className="flex items-center justify-between mb-4">
                 <p className="font-semibold text-purple-400">Average Price</p>
 
-                <LuDollarSign className="text-purple-600" />
+                <LuIndianRupee className="text-purple-600" />
               </div>
 
               <p className="text-lg font-semibold text-purple-600">
-                ${formatCurrencyInr(listings.averagePrice)}
+                ₹{formatCurrencyInr(listings.averagePrice)}
               </p>
               <p className="font-medium text-xs text-slate-500">Per listing</p>
             </div>
@@ -457,12 +457,12 @@ export const AdminPage = () => {
 
                     <div className="mt-5 flex items-center justify-between text-xs font-semibold">
                       <p className="text-slate-500">Highest Priced Car</p>
-                      <p>$3,400,000</p>
+                      <p>₹3,400,000</p>
                     </div>
 
                     <div className="mt-5 flex items-center justify-between text-xs font-semibold">
                       <p className="text-slate-500">Lowest Priced Car</p>
-                      <p>$18,500</p>
+                      <p>₹3,00,000</p>
                     </div>
 
                     <div className="mt-5 flex items-center justify-between text-xs font-semibold">
