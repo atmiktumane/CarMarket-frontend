@@ -3,7 +3,6 @@ import { Header } from "../Components/Header";
 import { LuIndianRupee } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { FaToggleOn } from "react-icons/fa";
 import { BarChart } from "../Components/Charts/BarChart";
 import { PieChart } from "../Components/Charts/PieChart";
 import { Button, LoadingOverlay, Modal } from "@mantine/core";
@@ -193,13 +192,8 @@ export const AdminPage = () => {
           </p>
         </div>
 
-        {/* Col 5 : Actions - Toggle + Delete */}
+        {/* Col 5 : Actions -  Delete */}
         <div className="w-1/5 flex items-center gap-3">
-          {/* Toggle */}
-          <div className="w-fit px-2 py-1 border border-slate-300 rounded-lg">
-            <FaToggleOn className="text-2xl text-emerald-700" />
-          </div>
-
           {/* Delete */}
           <div
             onClick={() => {

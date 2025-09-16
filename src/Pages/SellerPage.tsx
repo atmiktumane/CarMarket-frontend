@@ -461,7 +461,7 @@ export const SellerPage = () => {
               />
             </div>
 
-            {/* Row 4 - Condition + Location */}
+            {/* Row 4 - Condition + Status */}
             <div className=" flex items-center gap-3">
               {/* Condition Select Option */}
               <Select
@@ -473,21 +473,31 @@ export const SellerPage = () => {
                 onChange={(val) => onChangeCarFields(val, "condition")}
               />
 
-              {/* Location Input */}
-              <TextInput
-                withAsterisk
-                name="location"
-                label="Location"
-                placeholder="City, State"
-                radius="md"
-                className="w-1/2"
-                value={carDetails.location}
-                onChange={onChangeCarFields}
-                error={formError.location}
+              {/* Status Select Option */}
+              <Select
+                name="status"
+                label="Status"
+                placeholder="Select"
+                data={["ACTIVE", "INACTIVE"]}
+                defaultValue={carDetails.status}
+                onChange={(val) => onChangeCarFields(val, "status")}
               />
             </div>
 
-            {/* Row 5 - Description */}
+            {/* Row 5 - Location Input */}
+            <TextInput
+              withAsterisk
+              name="location"
+              label="Location"
+              placeholder="City, State"
+              radius="md"
+              className="w-full"
+              value={carDetails.location}
+              onChange={onChangeCarFields}
+              error={formError.location}
+            />
+
+            {/* Row 6 - Description */}
             <Textarea
               name="description"
               label="Description"
@@ -498,7 +508,7 @@ export const SellerPage = () => {
               error={formError.description}
             />
 
-            {/* Row 6 - Buttons (Cancel + Update) */}
+            {/* Row 7 - Buttons (Cancel + Update) */}
             <div className="flex gap-3">
               <Button
                 onClick={close}
