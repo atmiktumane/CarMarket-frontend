@@ -10,7 +10,6 @@ import {
 import { Header } from "../Components/Header";
 import { IoCalendarClearOutline, IoSpeedometerOutline } from "react-icons/io5";
 import { useDisclosure } from "@mantine/hooks";
-import { Carousel } from "@mantine/carousel";
 import { FaRegEdit } from "react-icons/fa";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { useEffect, useState } from "react";
@@ -79,44 +78,12 @@ export const SellerPage = () => {
         key={index}
         className="flex flex-col gap-5 border border-slate-300 rounded-xl"
       >
-        {/* Carousel - Car Images */}
-        <Carousel
-          withIndicators
-          slideGap="sm"
-          // Carousel Loop
-          emblaOptions={{
-            loop: true,
-            dragFree: false,
-            align: "center",
-          }}
-          //  below is the Advanced Tailwind CSS used : "&_button" -> targets button inside Carousel
-          className="[&_button]:!border-none [&_button]:!bg-violet-300"
-        >
-          <Carousel.Slide>
-            <img
-              src="/bmw_img.jpeg"
-              alt="car img"
-              className="w-full h-48 rounded-t-xl"
-            />
-          </Carousel.Slide>
-
-          <Carousel.Slide>
-            <img
-              src="/bmw_img.jpeg"
-              alt="car img"
-              className="w-full h-48 rounded-t-xl"
-            />
-          </Carousel.Slide>
-
-          <Carousel.Slide>
-            <img
-              src="/bmw_img.jpeg"
-              alt="car img"
-              className="w-full h-48 rounded-t-xl"
-            />
-          </Carousel.Slide>
-          {/* ...other slides */}
-        </Carousel>
+        {/* Car Image */}
+        <img
+          src="/dummy_img.jpg"
+          alt="car img"
+          className="w-full h-48 rounded-t-xl"
+        />
 
         {/* Car Details */}
         <div className="flex flex-col p-4 gap-3 text-slate-500 text-md">

@@ -104,44 +104,12 @@ export const BuyerPage = () => {
       >
         {/* Car Image + Tag */}
         <div className="relative">
-          {/* Carousel - Images */}
-          <Carousel
-            withIndicators
-            slideGap="sm"
-            // Carousel Loop
-            emblaOptions={{
-              loop: true,
-              dragFree: false,
-              align: "center",
-            }}
-            //  below is the Advanced Tailwind CSS used : "&_button" -> targets button inside Carousel
-            className="[&_button]:!border-none [&_button]:!bg-violet-300"
-          >
-            <Carousel.Slide>
-              <img
-                src="/bmw_img.jpeg"
-                alt="car img"
-                className="w-full h-48 rounded-t-xl"
-              />
-            </Carousel.Slide>
-
-            <Carousel.Slide>
-              <img
-                src="/bmw_img.jpeg"
-                alt="car img"
-                className="w-full h-48 rounded-t-xl"
-              />
-            </Carousel.Slide>
-
-            <Carousel.Slide>
-              <img
-                src="/bmw_img.jpeg"
-                alt="car img"
-                className="w-full h-48 rounded-t-xl"
-              />
-            </Carousel.Slide>
-            {/* ...other slides */}
-          </Carousel>
+          {/* Car Image */}
+          <img
+            src="/dummy_img.jpg"
+            alt="car img"
+            className="w-full h-48 rounded-t-xl"
+          />
 
           {/* Tag */}
           <div className="absolute top-3 left-3 bg-slate-800 text-white px-3 py-1 rounded-lg text-xs font-semibold">
@@ -171,7 +139,7 @@ export const BuyerPage = () => {
             <GrLocation /> <span>{item.location}</span>
           </p>
 
-          <Text size="xs" lineClamp={2}>
+          <Text size="xs" lineClamp={1}>
             {item.description}
           </Text>
 
