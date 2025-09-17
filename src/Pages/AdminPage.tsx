@@ -80,7 +80,7 @@ export const AdminPage = () => {
     null
   );
 
-  // console.log("analyticsData : ", analyticsData);
+  // console.log("carList : ", carList);
 
   // Analytics Data - Car Brand/Model
   const carBrandData = formatAnalyticsModelData(analyticsData?.topModels);
@@ -154,7 +154,7 @@ export const AdminPage = () => {
     }
   };
 
-  const renderCarList = carList.map((item: CarDetailsType, index: number) => {
+  const renderCarList = carList.map((item: any, index: number) => {
     return (
       <div
         key={index}
@@ -162,11 +162,21 @@ export const AdminPage = () => {
       >
         {/* Col 1 : Image */}
         <div className="w-1/5">
-          <img
-            src="/bmw_img.jpeg"
-            alt="car img"
-            className="w-20 h-12 rounded-lg"
-          />
+          {!item?.images || item?.images.length === 0 ? (
+            // Case 1: null OR empty array
+            <img
+              src="/dummy_img.jpg"
+              alt="car img"
+              className="w-20 h-12 rounded-lg"
+            />
+          ) : (
+            // Case 2: At least one image present
+            <img
+              src={`data:image/jpeg;base64,${item?.images[0]}`}
+              alt="car img"
+              className="w-20 h-12 rounded-lg"
+            />
+          )}
         </div>
 
         {/* Col 2 : Car Details */}
