@@ -32,6 +32,7 @@ import {
   formatTextToCapitalize,
   formatTextToUppercase,
 } from "../Utils/Utilities";
+import { Carousel } from "@mantine/carousel";
 
 export const SellerPage = () => {
   const formData = {
@@ -67,7 +68,7 @@ export const SellerPage = () => {
   const [loader, setLoader] = useState<boolean>(false);
 
   // State : to manage Car Lists
-  const [carList, setCarList] = useState<CarDetailsType[]>([]);
+  const [carList, setCarList] = useState([]);
 
   // State : to manage car details
   const [carDetails, setCarDetails] = useState<CarDetailsType>(formData);
@@ -78,20 +79,46 @@ export const SellerPage = () => {
   // State : to Store Array of Images url
   const [imagesArray, setImagesArray] = useState<string[]>([]);
 
-  // console.log("imagesArray : ", imagesArray);
+  // console.log("carList : ", carList);
 
-  const renderCarList = carList.map((item: CarDetailsType, index: number) => {
+  const renderCarList = carList.map((item: any, index: number) => {
     return (
       <div
         key={index}
         className="flex flex-col gap-5 border border-slate-300 rounded-xl"
       >
-        {/* Car Image */}
-        <img
-          src="/dummy_img.jpg"
-          alt="car img"
-          className="w-full h-48 rounded-t-xl"
-        />
+        {/* If No car image present, then show dummy image , else show Carousel*/}
+        {item?.images.length == 0 ? (
+          <img
+            src="/dummy_img.jpg"
+            alt="car img"
+            className="w-full h-48 rounded-t-xl"
+          />
+        ) : (
+          //  {/* Carousel - Images */}
+          <Carousel
+            withIndicators
+            slideGap="sm"
+            // Carousel Loop
+            emblaOptions={{
+              loop: true,
+              dragFree: false,
+              align: "center",
+            }}
+            // below is the Advanced Tailwind CSS used : "&_button" -> targets button inside Carousel
+            className="[&_button]:!border-none [&_button]:!bg-violet-300"
+          >
+            {item?.images.map((car_image: string) => (
+              <Carousel.Slide>
+                <img
+                  src={`data:image/jpeg;base64,${car_image}`}
+                  alt="car img"
+                  className="w-full h-48 rounded-t-xl"
+                />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        )}
 
         {/* Car Details */}
         <div className="flex flex-col p-4 gap-3 text-slate-500 text-md">
@@ -126,7 +153,10 @@ export const SellerPage = () => {
               radius="md"
               leftSection={<FaRegEdit />}
               onClick={() => {
-                setCarDetails(item);
+                // exclude images from item
+                const { images, ...rest } = item;
+                setCarDetails(rest); // store everything except for images
+
                 setFormError(formData);
                 setIsEdit(true);
                 open();
