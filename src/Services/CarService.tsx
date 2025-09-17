@@ -104,6 +104,17 @@ const getAnalyticsAPI = async () => {
   }
 };
 
+// Seller - POST : Upload Car Images
+const uploadCarImagesAPI = async (data: any) => {
+  try {
+    await axios.post(`${apiUrl}/api/v1/car/upload-images`, data);
+  } catch (error: any) {
+    errorNotification("Error", "Failed to upload images");
+
+    console.error("An unexpected error occurred : ", error);
+  }
+};
+
 export {
   getAllActiveCarAPI,
   getAllCarsOfUserAPI,
@@ -112,4 +123,5 @@ export {
   deleteCarAPI,
   getAllCarsAPI,
   getAnalyticsAPI,
+  uploadCarImagesAPI,
 };

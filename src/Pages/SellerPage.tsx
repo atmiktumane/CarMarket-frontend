@@ -1,5 +1,6 @@
 import {
   Button,
+  FileInput,
   LoadingOverlay,
   Modal,
   NumberInput,
@@ -22,6 +23,7 @@ import {
   deleteCarAPI,
   getAllCarsOfUserAPI,
   updateCarAPI,
+  uploadCarImagesAPI,
 } from "../Services/CarService";
 import type { CarDetailsType } from "./BuyerPage";
 import { getLocalStorageItem } from "../Utils/LocalStorage";
@@ -53,6 +55,9 @@ export const SellerPage = () => {
   // Mantine Modal Hook : Delete Car
   const [deleteCarModal, setDeleteCarModal] = useState<boolean>(false);
 
+  // Mantine Modal : Images
+  const [imagesModal, setImagesModal] = useState<boolean>(false);
+
   // State : to manage isEdit
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
@@ -70,7 +75,10 @@ export const SellerPage = () => {
   // State : to manage car form error
   const [formError, setFormError] = useState<CarDetailsType>(formData);
 
-  // console.log("carDetails : ", carDetails);
+  // State : to Store Array of Images url
+  const [imagesArray, setImagesArray] = useState<string[]>([]);
+
+  // console.log("imagesArray : ", imagesArray);
 
   const renderCarList = carList.map((item: CarDetailsType, index: number) => {
     return (
@@ -282,6 +290,68 @@ export const SellerPage = () => {
     }
   };
 
+  // Function to Convert Multiple Images to Base64
+  const getBase64Multiple = (files: File[]): Promise<string[]> => {
+    return Promise.all(
+      files.map(
+        (file) =>
+          new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (error) => reject(error);
+          })
+      )
+    );
+  };
+
+  // Handle : Images Change
+  const handleImagesChange = async (images: any) => {
+    // console.log("images : ", images);
+
+    // Convert Multiple Images to Base64
+    let base64Images: any = await getBase64Multiple(images);
+
+    // Split Base64 w.r.t comma ","
+    base64Images = base64Images.map((item: string) => item.split(",")[1]);
+    // console.log("Base64 Images:", base64Images);
+
+    setImagesArray(base64Images);
+  };
+
+  // Handle : Save Car Images
+  const handleCarImages = async () => {
+    // Validation - Check whether Car images are uploaded or not
+    if (imagesArray.length < 1) {
+      errorNotification("Failed", "Please upload images first");
+      return;
+    }
+
+    // Create request body
+    let request_body = { carId: carDetails?.id, images: imagesArray };
+
+    // Show Loader
+    setLoader(true);
+
+    try {
+      // API Call - Upload Images
+      await uploadCarImagesAPI(request_body);
+
+      // Reset - Images Modal, Images Array
+      setImagesModal(false);
+      setImagesArray([]);
+
+      // Show Success Message
+      successNotification("Success", "Uploaded Car Images");
+
+      // Hide Loader
+      setLoader(false);
+    } catch (error) {
+      // Hide Loader
+      setLoader(false);
+    }
+  };
+
   // Page Load Workflow
   useEffect(() => {
     getAllCarsOfUser();
@@ -337,180 +407,194 @@ export const SellerPage = () => {
           </div>
         </div>
 
-        {/* Mantine Modal - Add/Edit Car Form */}
-        <Modal
-          centered
-          opened={opened}
-          onClose={close}
-          title={isEdit ? "Edit Car" : "Add New Car"}
-          className="[&_h2]:!font-bold [&_h2]:!text-lg "
-        >
-          {/* Modal content */}
-          <div className="flex flex-col gap-3">
-            <p className="text-xs">
-              {isEdit
-                ? "Update the details of your car listing"
-                : "Fill in the details of your car listing"}
-            </p>
-
-            {/* Row 1 - Name Input */}
-            <TextInput
-              withAsterisk
-              name="name"
-              label="Name"
-              placeholder="Enter Name"
-              radius="md"
-              value={carDetails.name}
-              onChange={onChangeCarFields}
-              error={formError.name}
-            />
-
-            {/* Row 2 - Model Input */}
-            <TextInput
-              withAsterisk
-              name="model"
-              label="Model"
-              placeholder="Enter Model"
-              radius="md"
-              value={carDetails.model}
-              onChange={onChangeCarFields}
-              error={formError.model}
-            />
-
-            {/* Row 3 - Year + Price + Mileage */}
-            <div className=" flex items-center gap-3">
-              {/* Year Input */}
-              <NumberInput
-                withAsterisk
-                name="year"
-                label="Year"
-                placeholder="Enter Year"
-                radius="md"
-                className="w-1/3"
-                defaultValue="2025"
-                clampBehavior="strict"
-                min={0}
-                max={2100}
-                value={carDetails.first_purchase_year}
-                onChange={(val) =>
-                  onChangeCarFields(val, "first_purchase_year")
-                }
-              />
-
-              {/* Price Input */}
-              <NumberInput
-                withAsterisk
-                name="price"
-                label="Price (₹)"
-                placeholder="Enter Price"
-                radius="md"
-                className="w-1/3"
-                defaultValue="0"
-                clampBehavior="strict"
-                min={0}
-                value={carDetails.price}
-                onChange={(val) => onChangeCarFields(val, "price")}
-              />
-
-              {/* Mileage Input */}
-              <NumberInput
-                withAsterisk
-                name="mileage"
-                label="Mileage"
-                placeholder="Enter Mileage"
-                radius="md"
-                className="w-1/3"
-                defaultValue="0"
-                clampBehavior="strict"
-                min={0}
-                value={carDetails.mileage}
-                onChange={(val) => onChangeCarFields(val, "mileage")}
-              />
-            </div>
-
-            {/* Row 4 - Condition + Status */}
-            <div className=" flex items-center gap-3">
-              {/* Condition Select Option */}
-              <Select
-                name="condition"
-                label="Condition"
-                placeholder="Select"
-                data={["Excellent", "Very Good", "Good", "Fair"]}
-                defaultValue={formatTextToCapitalize(carDetails.condition)}
-                onChange={(val) => onChangeCarFields(val, "condition")}
-              />
-
-              {/* Status Select Option */}
-              <Select
-                name="status"
-                label="Status"
-                placeholder="Select"
-                data={["ACTIVE", "INACTIVE"]}
-                defaultValue={carDetails.status}
-                onChange={(val) => onChangeCarFields(val, "status")}
-              />
-            </div>
-
-            {/* Row 5 - Location Input */}
-            <TextInput
-              withAsterisk
-              name="location"
-              label="Location"
-              placeholder="City, State"
-              radius="md"
-              className="w-full"
-              value={carDetails.location}
-              onChange={onChangeCarFields}
-              error={formError.location}
-            />
-
-            {/* Row 6 - Description */}
-            <Textarea
-              name="description"
-              label="Description"
-              withAsterisk
-              placeholder="Describe your car's features, condition, and any additional details..."
-              value={carDetails.description}
-              onChange={onChangeCarFields}
-              error={formError.description}
-            />
-
-            {/* Row 7 - Buttons (Cancel + Update) */}
-            <div className="flex gap-3">
-              <Button
-                onClick={close}
-                fullWidth
-                variant="light"
-                color="black"
-                radius="md"
-              >
-                Cancel
-              </Button>
-
-              {isEdit ? (
-                <Button
-                  onClick={submitCarForm}
-                  fullWidth
-                  variant="filled"
-                  color="yellow"
-                  radius="md"
-                >
-                  Update Car
-                </Button>
-              ) : (
-                <Button
-                  onClick={submitCarForm}
-                  fullWidth
-                  variant="filled"
-                  color="green"
-                  radius="md"
-                >
-                  Add Car
-                </Button>
+        {/* Mantine Modal - Add/Edit Car Form - Conditional (If Images Modal is Opened then don't show this Modal) */}
+        {!imagesModal && (
+          <Modal
+            centered
+            opened={opened}
+            onClose={close}
+            title={isEdit ? "Edit Car" : "Add New Car"}
+            className="[&_h2]:!font-bold [&_h2]:!text-lg "
+          >
+            {/* Modal content */}
+            <div className="flex flex-col gap-2">
+              {/* Button - Upload Images */}
+              {isEdit && (
+                <div className="flex place-content-end">
+                  <Button
+                    variant="filled"
+                    color="violet"
+                    radius="md"
+                    className="sm:w-1/2 md:w-1/3"
+                    onClick={() => {
+                      setImagesModal(true);
+                      setImagesArray([]);
+                    }}
+                  >
+                    Upload Images
+                  </Button>
+                </div>
               )}
+
+              {/* Row 1 - Name Input */}
+              <TextInput
+                withAsterisk
+                name="name"
+                label="Name"
+                placeholder="Enter Name"
+                radius="md"
+                value={carDetails.name}
+                onChange={onChangeCarFields}
+                error={formError.name}
+              />
+
+              {/* Row 2 - Model Input */}
+              <TextInput
+                withAsterisk
+                name="model"
+                label="Model"
+                placeholder="Enter Model"
+                radius="md"
+                value={carDetails.model}
+                onChange={onChangeCarFields}
+                error={formError.model}
+              />
+
+              {/* Row 3 - Year + Price + Mileage */}
+              <div className=" flex items-center gap-3">
+                {/* Year Input */}
+                <NumberInput
+                  withAsterisk
+                  name="year"
+                  label="Year"
+                  placeholder="Enter Year"
+                  radius="md"
+                  className="w-1/3"
+                  defaultValue="2025"
+                  clampBehavior="strict"
+                  min={0}
+                  max={2100}
+                  value={carDetails.first_purchase_year}
+                  onChange={(val) =>
+                    onChangeCarFields(val, "first_purchase_year")
+                  }
+                />
+
+                {/* Price Input */}
+                <NumberInput
+                  withAsterisk
+                  name="price"
+                  label="Price (₹)"
+                  placeholder="Enter Price"
+                  radius="md"
+                  className="w-1/3"
+                  defaultValue="0"
+                  clampBehavior="strict"
+                  min={0}
+                  value={carDetails.price}
+                  onChange={(val) => onChangeCarFields(val, "price")}
+                />
+
+                {/* Mileage Input */}
+                <NumberInput
+                  withAsterisk
+                  name="mileage"
+                  label="Mileage"
+                  placeholder="Enter Mileage"
+                  radius="md"
+                  className="w-1/3"
+                  defaultValue="0"
+                  clampBehavior="strict"
+                  min={0}
+                  value={carDetails.mileage}
+                  onChange={(val) => onChangeCarFields(val, "mileage")}
+                />
+              </div>
+
+              {/* Row 4 - Condition + Status */}
+              <div className=" flex items-center gap-3">
+                {/* Condition Select Option */}
+                <Select
+                  name="condition"
+                  label="Condition"
+                  placeholder="Select"
+                  data={["Excellent", "Very Good", "Good", "Fair"]}
+                  defaultValue={formatTextToCapitalize(carDetails.condition)}
+                  onChange={(val) => onChangeCarFields(val, "condition")}
+                />
+
+                {/* Status Select Option */}
+                <Select
+                  name="status"
+                  label="Status"
+                  placeholder="Select"
+                  data={["ACTIVE", "INACTIVE"]}
+                  defaultValue={carDetails.status}
+                  onChange={(val) => onChangeCarFields(val, "status")}
+                />
+              </div>
+
+              {/* Row 5 - Location Input */}
+              <TextInput
+                withAsterisk
+                name="location"
+                label="Location"
+                placeholder="City, State"
+                radius="md"
+                className="w-full"
+                value={carDetails.location}
+                onChange={onChangeCarFields}
+                error={formError.location}
+              />
+
+              {/* Row 6 - Description */}
+              <Textarea
+                name="description"
+                label="Description"
+                withAsterisk
+                placeholder="Describe your car's features, condition, and any additional details..."
+                value={carDetails.description}
+                onChange={onChangeCarFields}
+                error={formError.description}
+              />
+
+              {/* Row 7 - Buttons (Cancel + Update) */}
+              <div className="flex gap-3">
+                <Button
+                  onClick={close}
+                  fullWidth
+                  variant="light"
+                  color="black"
+                  radius="md"
+                >
+                  Cancel
+                </Button>
+
+                {isEdit ? (
+                  <Button
+                    onClick={submitCarForm}
+                    fullWidth
+                    variant="filled"
+                    color="yellow"
+                    radius="md"
+                  >
+                    Update Car
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={submitCarForm}
+                    fullWidth
+                    variant="filled"
+                    color="green"
+                    radius="md"
+                  >
+                    Add Car
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        </Modal>
+          </Modal>
+        )}
 
         {/* Mantine Modal - Delete Car Modal */}
         <Modal
@@ -550,11 +634,41 @@ export const SellerPage = () => {
             </div>
           </div>
         </Modal>
+
+        {/* Mantine Modal - Car Images Modal */}
+        <Modal
+          opened={imagesModal}
+          onClose={() => setImagesModal(false)}
+          title="Car Images"
+          centered
+          className="[&_h2]:!font-semibold"
+        >
+          {/* Upload Images */}
+          <FileInput
+            label="Upload Images"
+            placeholder="Upload files"
+            accept="image/png,image/jpeg,image/jpg"
+            multiple
+            clearable
+            onChange={handleImagesChange}
+          />
+
+          {/* Save Button */}
+          <Button
+            variant="filled"
+            color="violet"
+            radius="md"
+            className="mt-3"
+            onClick={handleCarImages}
+          >
+            Save Images
+          </Button>
+        </Modal>
       </div>
 
       <LoadingOverlay
         visible={loader}
-        zIndex={1000}
+        zIndex={100000}
         overlayProps={{ radius: "sm", blur: 2 }}
         loaderProps={{ color: "violet", type: "bars" }}
       />
