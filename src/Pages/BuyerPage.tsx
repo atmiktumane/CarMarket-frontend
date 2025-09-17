@@ -32,6 +32,10 @@ export type CarDetailsType = {
   userId: string;
 };
 
+type CarsWithImages = CarDetailsType & {
+  images: string[];
+};
+
 export const BuyerPage = () => {
   // Matine Modal Hook : Car Details
   const [opened, { open, close }] = useDisclosure(false);
@@ -40,10 +44,10 @@ export const BuyerPage = () => {
   const [loader, setLoader] = useState<boolean>(false);
 
   // State : to store CarList
-  const [activeCarList, setActiveCarList] = useState<CarDetailsType[]>([]);
+  const [activeCarList, setActiveCarList] = useState<CarsWithImages[]>([]);
 
   // State : to manage Single Car's Detail
-  const [carDetails, setCarDetails] = useState<CarDetailsType>({
+  const [carDetails, setCarDetails] = useState<CarsWithImages>({
     id: "",
     name: "",
     model: "",
@@ -56,12 +60,13 @@ export const BuyerPage = () => {
     condition: "",
     status: "",
     userId: "",
+    images: [],
   });
 
   // State : to manage search filter
   const [search, setSearch] = useState<string>("");
 
-  console.log("search filter : ", search.length);
+  // console.log("carDetails : ", carDetails);
 
   const filterOnChange = (e: any) => {
     let value = e.target.value;
@@ -104,12 +109,38 @@ export const BuyerPage = () => {
       >
         {/* Car Image + Tag */}
         <div className="relative">
-          {/* Car Image */}
-          <img
-            src="/dummy_img.jpg"
-            alt="car img"
-            className="w-full h-48 rounded-t-xl"
-          />
+          {/* If No car image present, then show dummy image , else show Carousel*/}
+          {item?.images.length == 0 ? (
+            <img
+              src="/dummy_img.jpg"
+              alt="car img"
+              className="w-full h-48 rounded-t-xl"
+            />
+          ) : (
+            //  {/* Carousel - Images */}
+            <Carousel
+              withIndicators
+              slideGap="sm"
+              // Carousel Loop
+              emblaOptions={{
+                loop: true,
+                dragFree: false,
+                align: "center",
+              }}
+              // below is the Advanced Tailwind CSS used : "&_button" -> targets button inside Carousel
+              className="[&_button]:!border-none [&_button]:!bg-violet-300"
+            >
+              {item?.images.map((car_image: string, index: number) => (
+                <Carousel.Slide key={index}>
+                  <img
+                    src={`data:image/jpeg;base64,${car_image}`}
+                    alt="car img"
+                    className="w-full h-48 rounded-t-xl"
+                  />
+                </Carousel.Slide>
+              ))}
+            </Carousel>
+          )}
 
           {/* Tag */}
           <div className="absolute top-3 left-3 bg-slate-800 text-white px-3 py-1 rounded-lg text-xs font-semibold">
@@ -165,9 +196,6 @@ export const BuyerPage = () => {
 
     // Fetch All Active Cars API call
     getAllActiveCarsFunc("");
-
-    // Hide Loader
-    setLoader(false);
   }, []);
 
   return (
@@ -252,44 +280,38 @@ export const BuyerPage = () => {
               </p>
             </div>
 
-            {/* Carousel - Images */}
-            <Carousel
-              withIndicators
-              slideGap="sm"
-              // Carousel Loop
-              emblaOptions={{
-                loop: true,
-                dragFree: false,
-                align: "center",
-              }}
-              //  below is the Advanced Tailwind CSS used : "&_button" -> targets button inside Carousel
-              className="[&_button]:!border-none [&_button]:!bg-violet-300"
-            >
-              <Carousel.Slide>
-                <img
-                  src="/bmw_img.jpeg"
-                  alt="car img"
-                  className="w-full h-48 rounded-xl"
-                />
-              </Carousel.Slide>
-
-              <Carousel.Slide>
-                <img
-                  src="/bmw_img.jpeg"
-                  alt="car img"
-                  className="w-full h-48 rounded-xl"
-                />
-              </Carousel.Slide>
-
-              <Carousel.Slide>
-                <img
-                  src="/bmw_img.jpeg"
-                  alt="car img"
-                  className="w-full h-48 rounded-xl"
-                />
-              </Carousel.Slide>
-              {/* ...other slides */}
-            </Carousel>
+            {/* If No car image present, then show dummy image , else show Carousel*/}
+            {carDetails?.images.length == 0 ? (
+              <img
+                src="/dummy_img.jpg"
+                alt="car img"
+                className="w-full h-48 rounded-t-xl"
+              />
+            ) : (
+              //  {/* Carousel - Images */}
+              <Carousel
+                withIndicators
+                slideGap="sm"
+                // Carousel Loop
+                emblaOptions={{
+                  loop: true,
+                  dragFree: false,
+                  align: "center",
+                }}
+                // below is the Advanced Tailwind CSS used : "&_button" -> targets button inside Carousel
+                className="[&_button]:!border-none [&_button]:!bg-violet-300"
+              >
+                {carDetails?.images.map((car_image: string, index: number) => (
+                  <Carousel.Slide key={index}>
+                    <img
+                      src={`data:image/jpeg;base64,${car_image}`}
+                      alt="car img"
+                      className="w-full h-48 rounded-t-xl"
+                    />
+                  </Carousel.Slide>
+                ))}
+              </Carousel>
+            )}
 
             {/* More Details */}
             <div className="flex items-start gap-8 text-slate-600">

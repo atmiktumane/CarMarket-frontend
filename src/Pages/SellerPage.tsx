@@ -108,8 +108,8 @@ export const SellerPage = () => {
             // below is the Advanced Tailwind CSS used : "&_button" -> targets button inside Carousel
             className="[&_button]:!border-none [&_button]:!bg-violet-300"
           >
-            {item?.images.map((car_image: string) => (
-              <Carousel.Slide>
+            {item?.images.map((car_image: string, index: number) => (
+              <Carousel.Slide key={index}>
                 <img
                   src={`data:image/jpeg;base64,${car_image}`}
                   alt="car img"
