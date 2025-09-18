@@ -371,6 +371,9 @@ export const SellerPage = () => {
       setImagesModal(false);
       setImagesArray([]);
 
+      // Fetch All Cars API
+      getAllCarsOfUser();
+
       // Show Success Message
       successNotification("Success", "Uploaded Car Images");
 
