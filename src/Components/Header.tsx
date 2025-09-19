@@ -1,11 +1,11 @@
-import { Avatar, Button } from "@mantine/core";
+import { Avatar, Button, Menu } from "@mantine/core";
 import { FaCar } from "react-icons/fa";
 import { MdOutlineLogout } from "react-icons/md";
 import {
   clearAllLocalStorageItems,
   getLocalStorageItem,
 } from "../Utils/LocalStorage";
-import { getNameInitials } from "../Utils/Utilities";
+import { formatTextToCapitalize, getNameInitials } from "../Utils/Utilities";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
@@ -26,15 +26,17 @@ export const Header = () => {
   };
 
   return (
-    <div className="w-full h-20 flex justify-between items-center px-6 bg-slate-100">
+    <div className="w-full h-15 md:h-20 flex justify-between items-center px-6 bg-slate-100">
       {/* Left - Logo */}
       <div className="flex items-center gap-3 cursor-default">
-        <FaCar className="h-8 w-8 text-purple-700" />
-        <p className="text-2xl font-bold text-purple-500">CarMarket</p>
+        <FaCar className="h-6 md:h-8 w-6 md:w-8 text-purple-700" />
+        <p className="text-lg md:text-2xl font-bold text-purple-500">
+          CarMarket
+        </p>
       </div>
 
       {/* Right - User Info + Logout */}
-      <div className="flex items-center gap-8">
+      <div className="hidden md:flex items-center gap-8">
         {/* User Info */}
         <div className="flex items-center gap-2">
           {/* Avatar */}
@@ -69,6 +71,59 @@ export const Header = () => {
         >
           Logout
         </Button>
+      </div>
+
+      {/* Profile Menu - Mobile Responsive View  */}
+      <div className="flex md:hidden">
+        <Menu shadow="md" width={200}>
+          <Menu.Target>
+            <Button
+              variant="light"
+              color="violet"
+              radius="lg"
+              className="[&_span]:text-[12px]"
+            >
+              Profile
+            </Button>
+          </Menu.Target>
+
+          <Menu.Dropdown>
+            <Menu.Item>
+              {/* Name + Email */}
+              <div>
+                <p className="font-semibold text-[10px] capitalize">
+                  {userDetails.name}
+                </p>
+                <p className="font-medium text-[10px] text-slate-500">
+                  {userDetails.email}
+                </p>
+              </div>
+            </Menu.Item>
+
+            <Menu.Item>
+              {/* User Role */}
+              <p className="font-medium text-[10px] text-purple-500">
+                {formatTextToCapitalize(userDetails.role)} Role
+              </p>
+            </Menu.Item>
+
+            <Menu.Item>
+              {/* Logout */}
+              <Button
+                fullWidth
+                leftSection={<MdOutlineLogout size={14} />}
+                variant="light"
+                color="red.9"
+                radius=""
+                // size={`[10px]`}
+                className="[&_span]:!text-[12px]"
+                onClick={logoutFunction}
+              >
+                Logout
+              </Button>
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </div>
     </div>
   );

@@ -111,8 +111,16 @@ export const LoginPage = () => {
     <>
       <div className="w-[100vw] h-[100vh] flex bg-slate-100">
         {/* Left */}
-        <div className="w-1/2 flex flex-col justify-center px-20 gap-3">
-          <h6 className="text-lg font-semibold">Login to Account</h6>
+        <div className="w-full lg:w-1/2 flex flex-col justify-center px-10 md:px-20 gap-3">
+          {/* Logo - Show only in Mobile + Tab Responsive view */}
+          <div className="flex lg:hidden items-center justify-center gap-4 mb-10">
+            <FaCar className="h-8 md:h-14 w-8 md:w-14 text-purple-700" />
+            <p className="text-2xl md:text-5xl font-bold text-purple-500">
+              CarMarket
+            </p>
+          </div>
+
+          <h6 className="text-md font-semibold ">Login to Account</h6>
 
           {/* Email Input */}
           <TextInput
@@ -166,7 +174,7 @@ export const LoginPage = () => {
         </div>
 
         {/* Right */}
-        <div className="w-1/2 h-full flex flex-col items-center justify-center gap-3 bg-purple-200 rounded-l-[200px]">
+        <div className="w-1/2 h-full hidden lg:flex flex-col items-center justify-center gap-3 bg-purple-200 rounded-l-[200px]">
           {/* Logo */}
           <div className="flex items-center gap-6">
             <FaCar className="h-14 w-14 text-purple-700" />

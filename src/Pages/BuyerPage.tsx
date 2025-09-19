@@ -204,21 +204,25 @@ export const BuyerPage = () => {
         <Header />
 
         {/* Buyer Page Content */}
-        <div className="flex flex-col px-18 py-10 gap-10">
+        <div className="flex flex-col px-6 md:px-18 py-10 gap-10">
           {/* Row 1 - Title */}
           <div className="flex flex-col gap-2">
-            <p className="text-3xl font-semibold">Find Your Perfect Car</p>
-            <p className="text-sm font-medium text-slate-500">
+            <p className="text-[14px] md:text-3xl font-semibold">
+              Find Your Perfect Car
+            </p>
+            <p className="text-[12px] md:text-sm font-medium text-slate-500">
               Browse through our selection of quality used cars
             </p>
           </div>
 
           {/* Row 2 - Search & Filter */}
-          <div className="flex flex-col px-6 py-3 gap-5 border border-slate-300 rounded-lg">
-            <p className="font-semibold">Search & Filter</p>
+          <div className="flex flex-col px-3 md:px-6 py-3 gap-5 border border-slate-300 rounded-lg">
+            <p className="text-[13px] md:text-lg font-semibold">
+              Search & Filter
+            </p>
 
             {/* Filters */}
-            <div className="flex items-center gap-10">
+            <div className="flex items-center gap-3 md:gap-10">
               {/* Search Bar */}
               <TextInput
                 variant="default"
@@ -226,7 +230,7 @@ export const BuyerPage = () => {
                 name="search"
                 placeholder="Search Cars..."
                 radius="lg"
-                className="w-1/3"
+                className="w-3/5 md:w-1/3"
                 value={search}
                 onChange={filterOnChange}
               />
@@ -243,6 +247,7 @@ export const BuyerPage = () => {
                 variant="filled"
                 color="violet"
                 radius="lg"
+                className="[&_span]:!text-[11px] md:[&_span]:!text-[14px]"
               >
                 Clear Filters
               </Button>
@@ -316,7 +321,7 @@ export const BuyerPage = () => {
             {/* More Details */}
             <div className="flex items-start gap-8 text-slate-600">
               {/* left - Vehicle Details */}
-              <div className="w-1/2 flex flex-col gap-2 text-xs font-medium">
+              <div className="w-1/2 flex flex-col gap-2 text-[10px] md:text-xs font-medium">
                 <p className="text-black font-semibold">Vehicle Details</p>
 
                 <div className="flex items-center justify-between">
@@ -343,7 +348,7 @@ export const BuyerPage = () => {
               </div>
 
               {/* right - Pricing & Location */}
-              <div className="w-1/2 flex flex-col gap-2 text-xs font-medium">
+              <div className="w-1/2 flex flex-col gap-2 text-[10px] md:text-xs font-medium">
                 <p className="text-black font-semibold">Pricing & Location</p>
 
                 <div className="flex items-center justify-between">
@@ -361,7 +366,7 @@ export const BuyerPage = () => {
             </div>
 
             {/* Description */}
-            <div className="flex flex-col gap-1 text-xs">
+            <div className="flex flex-col gap-1 text-[10px] md:text-xs">
               <p className="font-semibold uppercase">Description</p>
               <Text size="xs" lineClamp={2}>
                 {carDetails.description}

@@ -396,12 +396,14 @@ export const SellerPage = () => {
         <Header />
 
         {/* Seller Page Content */}
-        <div className="flex flex-col px-18 py-10 gap-10">
+        <div className="flex flex-col px-6 md:px-18 py-10 gap-10">
           {/* Row 1 - Title + Add Car btn */}
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-2">
-              <p className="text-3xl font-semibold">Seller Dashboard</p>
-              <p className="text-sm font-medium text-slate-500">
+              <p className="text-[14px] md:text-3xl font-semibold">
+                Seller Dashboard
+              </p>
+              <p className="text-[12px] md:text-sm font-medium text-slate-500">
                 Manage your car listings
               </p>
             </div>
@@ -417,10 +419,11 @@ export const SellerPage = () => {
                 // Open Add Car Modal
                 open();
               }}
-              leftSection="+"
+              // leftSection="+"
               variant="filled"
               color="green"
               radius="md"
+              className="[&_span]:!text-[12px]"
             >
               Add New Car
             </Button>
@@ -428,8 +431,10 @@ export const SellerPage = () => {
 
           {/* Row 2 - Info */}
           <div className="flex flex-col px-6 py-3 gap-1 border border-slate-300 rounded-lg">
-            <p className="font-semibold">Your Listings ({carList?.length})</p>
-            <p className="text-sm font-medium text-slate-600">
+            <p className="font-semibold text-[13px] md:text-md">
+              Your Listings ({carList?.length})
+            </p>
+            <p className="text-[12px] md:text-sm font-medium text-slate-600">
               Manage your car listings and track their performance
             </p>
           </div>
