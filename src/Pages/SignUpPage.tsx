@@ -11,10 +11,7 @@ import { MdLockOutline, MdOutlineAlternateEmail } from "react-icons/md";
 import { signupFormValidation } from "../Utils/FormValidation";
 import { signupAPI } from "../Services/UserService";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  errorNotification,
-  successNotification,
-} from "../Utils/NotificationService";
+import { successNotification } from "../Utils/NotificationService";
 
 export const SignUpPage = () => {
   // Initial values of Signup form inputs
@@ -141,9 +138,6 @@ export const SignUpPage = () => {
     } catch (error: any) {
       // Hide Loader
       setLoader(false);
-
-      // Error Notification
-      errorNotification("Failed to Sign Up", error.response?.data);
     }
   };
 

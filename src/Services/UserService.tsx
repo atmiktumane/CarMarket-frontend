@@ -1,4 +1,5 @@
 import axios from "axios";
+import { errorNotification } from "../Utils/NotificationService";
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -11,12 +12,11 @@ const signupAPI = async (user_data: any) => {
     );
 
     return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      throw new Error(error.response.data);
-    } else {
-      console.error("An unexpected error occurred : ", error);
-    }
+  } catch (error: any) {
+    // Error Notification
+    errorNotification("Error", "Failed to Signup");
+
+    throw new Error("An unexpected error occurred : ", error);
   }
 };
 
@@ -29,12 +29,11 @@ const loginAPI = async (login_data: any) => {
     );
 
     return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      throw new Error(error.response.data);
-    } else {
-      console.error("An unexpected error occurred : ", error);
-    }
+  } catch (error: any) {
+    // Error Notification
+    errorNotification("Error", "Failed to Login");
+
+    throw new Error("An unexpected error occurred : ", error);
   }
 };
 
