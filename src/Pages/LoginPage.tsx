@@ -7,7 +7,7 @@ import {
 import { useState } from "react";
 import { FaCar } from "react-icons/fa";
 import { MdLockOutline, MdOutlineAlternateEmail } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginFormValidation } from "../Utils/FormValidation";
 import { loginAPI } from "../Services/UserService";
 import {
@@ -159,12 +159,12 @@ export const LoginPage = () => {
           {/* Signup  */}
           <p className="text-center">
             Don't have an account ?{" "}
-            <a
-              href="/signup"
+            <Link
+              to="/signup"
               className="font-semibold text-violet-500 hover:underline"
             >
               Signup
-            </a>
+            </Link>
           </p>
 
           {/* Reset Password */}

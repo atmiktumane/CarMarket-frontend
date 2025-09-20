@@ -10,7 +10,7 @@ import { FaCar } from "react-icons/fa";
 import { MdLockOutline, MdOutlineAlternateEmail } from "react-icons/md";
 import { signupFormValidation } from "../Utils/FormValidation";
 import { signupAPI } from "../Services/UserService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   errorNotification,
   successNotification,
@@ -248,12 +248,12 @@ export const SignUpPage = () => {
           {/* Login  */}
           <p className="text-center">
             Already have an account ?{" "}
-            <a
-              href="/login"
+            <Link
+              to="/login"
               className="font-semibold text-violet-500 hover:underline"
             >
               Login
-            </a>
+            </Link>
           </p>
         </div>
       </div>
